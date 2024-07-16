@@ -11,8 +11,8 @@ class CreateProductionCompaniesTable extends Migration
         Schema::create('production_companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-			$table->string('logoPath')->nullable();
-			$table->string('originCountry')->nullable();
+			$table->string('logo_path')->nullable();
+			$table->string('origin_country')->nullable();
             $table->timestamps();
         });
 

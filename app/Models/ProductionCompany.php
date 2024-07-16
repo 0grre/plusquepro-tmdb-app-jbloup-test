@@ -18,8 +18,8 @@ class ProductionCompany extends Model
     protected $fillable = [
         'id',
         'name',
-        'logoPath',
-        'originCountry'
+        'logo_path',
+        'origin_country'
     ];
 
     /**

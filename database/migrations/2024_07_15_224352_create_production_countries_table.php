@@ -10,7 +10,7 @@ class CreateProductionCountriesTable extends Migration
     {
         Schema::create('production_countries', function (Blueprint $table) {
             $table->id();
-            $table->string('iso31661');
+            $table->string('iso_3166_1');
 			$table->string('name')->nullable();
             $table->timestamps();
         });

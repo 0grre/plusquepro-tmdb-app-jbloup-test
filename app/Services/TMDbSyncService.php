@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\ProductionCompany;
+use App\Models\ProductionCountry;
 use App\Models\SpokenLanguage;
 use App\Models\Collection;
 use Illuminate\Support\Facades\Log;
@@ -108,13 +109,25 @@ class TMDbSyncService
             $movie->productionCompanies()->sync($productionCompanies->pluck('id'));
         }
 
+        if (isset($movieData['production_countries'])) {
+            $productionCountries = collect($movieData['production_countries'])->filter(function ($countryData) {
+                return !empty($countryData['iso_3166_1']);
+            })->map(function ($countryData) {
+                return ProductionCountry::firstOrCreate(
+                    ['iso_3166_1' => $countryData['iso_3166_1']],
+                    ['name' => $countryData['name']]
+                );
+            });
+            $movie->productionCompanies()->sync($productionCountries->pluck('id'));
+        }
+
         if (isset($movieData['spoken_languages'])) {
             $spokenLanguages = collect($movieData['spoken_languages'])->filter(function ($languageData) {
-                return !empty($languageData['iso_639_1']) && !empty($languageData['english_name']);
+                return !empty($languageData['iso_639_1']);
             })->map(function ($languageData) {
                 return SpokenLanguage::firstOrCreate(
-                    ['iso_639_1' => $languageData['iso_639_1']],
-                    ['english_name' => $languageData['english_name']]
+                    ['name' => $languageData['name']],
+                    ['iso_639_1' => $languageData['iso_639_1'], 'english_name' => $languageData['english_name']]
                 );
             });
             $movie->spokenLanguages()->sync($spokenLanguages->pluck('id'));

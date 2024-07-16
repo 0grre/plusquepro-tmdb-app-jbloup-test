@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Movie;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,3 +42,17 @@ Route::resource('production-countries', App\Http\Controllers\ProductionCountryCo
 
 // Routes for SpokenLanguage
 Route::resource('spoken-languages', App\Http\Controllers\SpokenLanguageController::class);
+
+
+Route::get('test', function () {
+    $service = app()->make(App\Services\TMDbApiService::class);
+    $syncService = app()->make(App\Services\TMDbSyncService::class);
+//    $genres = $service->getTrendingMovies();
+    $genres = Movie::all();
+
+    foreach ($genres as $genre) {
+        $syncService->updateMovieDetails($genre);
+    }
+
+    dd($syncService->formatMovieDetails($service->getMovieDetails(974262))[ "id" ]);
+});

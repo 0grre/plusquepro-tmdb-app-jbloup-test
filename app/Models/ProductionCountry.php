@@ -16,8 +16,7 @@ class ProductionCountry extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
-        'iso31661',
+        'iso_3166_1',
         'name'
     ];
 
