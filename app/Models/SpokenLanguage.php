@@ -16,6 +16,7 @@ class SpokenLanguage extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'englishName',
         'iso6391',
         'name'

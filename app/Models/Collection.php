@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Genre extends Model
+class Collection extends Model
 {
     use HasFactory;
 
@@ -17,14 +17,16 @@ class Genre extends Model
      */
     protected $fillable = [
         'id',
-        'name'
+        'name',
+        'poster_path',
+        'backdrop_path'
     ];
 
     /**
-     * The movies that belong to the genre.
+     * The movies that belong to the production company.
      */
-    public function movies(): BelongsToMany
+    public function movies(): HasMany
     {
-        return $this->belongsToMany(Movie::class);
+        return $this->hasmany(Movie::class);
     }
 }

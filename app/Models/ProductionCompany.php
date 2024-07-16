@@ -16,6 +16,7 @@ class ProductionCompany extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'logoPath',
         'originCountry'

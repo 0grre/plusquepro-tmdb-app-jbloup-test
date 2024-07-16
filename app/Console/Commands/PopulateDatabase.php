@@ -32,13 +32,23 @@ class PopulateDatabase extends Command
     public function handle(): void
     {
         $this->info('Fetching genres...');
-        $this->syncService->populateGenres();
-        $this->info('Genres fetched and stored.');
+        try {
+            $this->syncService->populateGenres();
+            $this->info('Genres fetched and stored.');
+        } catch (\Exception $e) {
+            $this->error("Failed to fetch genres: {$e->getMessage()}");
+            return;
+        }
 
         $timeWindow = $this->argument('timeWindow');
         $this->info("Fetching trending movies for {$timeWindow}...");
-        $this->syncService->populateTrendingMovies($timeWindow);
-        $this->info('Trending movies fetched and stored.');
+        try {
+            $this->syncService->populateTrendingMovies($timeWindow);
+            $this->info('Trending movies fetched and stored.');
+        } catch (\Exception $e) {
+            $this->error("Failed to fetch trending movies: {$e->getMessage()}");
+            return;
+        }
 
         $this->info('Updating movie details...');
         $movies = Movie::all();

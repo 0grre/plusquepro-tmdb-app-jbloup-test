@@ -11,7 +11,7 @@ class CreateSpokenLanguagesTable extends Migration
         Schema::create('spoken_languages', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('iso_639_1')->unique();
+            $table->string('iso_639_1')->nullable();
             $table->string('english_name')->nullable();
             $table->timestamps();
         });

@@ -48,20 +48,22 @@ class TMDbApiService
      * Get movie details
      *
      * @param int $movieId
+     * @param string $language
      * @return mixed
      */
-    public function getMovieDetails(int $movieId): mixed
+    public function getMovieDetails(int $movieId, string $language = 'en_US'): mixed
     {
-        return $this->makeRequest("movie/{$movieId}");
+        return $this->makeRequest("movie/{$movieId}?language={$language}");
     }
 
     /**
      * Get movie genres
      *
+     * @param string $language
      * @return mixed
      */
-    public function getGenres(): mixed
+    public function getGenres(string $language = 'en'): mixed
     {
-        return $this->makeRequest("genre/movie/list")['genres'];
+        return $this->makeRequest("genre/movie/list?language={$language}")['genres'];
     }
 }

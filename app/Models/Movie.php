@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Movie extends Model
@@ -16,6 +17,7 @@ class Movie extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'title',
         'original_title',
         'overview',
@@ -68,5 +70,13 @@ class Movie extends Model
     public function spokenLanguages(): BelongsToMany
     {
         return $this->belongsToMany(SpokenLanguage::class);
+    }
+
+    /**
+     * The collections that belong to the movie.
+     */
+    public function collection(): BelongsTo
+    {
+        return $this->belongsTo(Collection::class);
     }
 }

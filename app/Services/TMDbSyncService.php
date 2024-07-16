@@ -6,6 +6,7 @@ use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\ProductionCompany;
 use App\Models\SpokenLanguage;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Log;
 
 class TMDbSyncService
@@ -50,10 +51,11 @@ class TMDbSyncService
         $trendingMovies = $this->apiService->getTrendingMovies($timeWindow);
 
         foreach ($trendingMovies as $movieData) {
-            Movie::updateOrCreate(
+            $movie = Movie::updateOrCreate(
                 ['id' => $movieData['id']],
                 $this->formatTrendingMovie($movieData)
             );
+            $this->syncMovieRelations($movie, $movieData);
         }
     }
 
@@ -116,6 +118,20 @@ class TMDbSyncService
                 );
             });
             $movie->spokenLanguages()->sync($spokenLanguages->pluck('id'));
+        }
+
+        if (isset($movieData['belongs_to_collection'])) {
+            $collectionData = $movieData['belongs_to_collection'];
+            $collection = Collection::firstOrCreate(
+                ['id' => $collectionData['id']],
+                [
+                    'name' => $collectionData['name'],
+                    'poster_path' => $collectionData['poster_path'],
+                    'backdrop_path' => $collectionData['backdrop_path']
+                ]
+            );
+            $movie->collection()->associate($collection);
+            $movie->save();
         }
     }
 

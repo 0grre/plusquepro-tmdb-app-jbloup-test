@@ -30,6 +30,7 @@ class CreateMoviesTable extends Migration
             $table->integer('runtime')->nullable();
             $table->string('status')->nullable();
             $table->string('tagline')->nullable();
+            $table->foreignId('collection_id')->nullable()->constrained('collections')->onDelete('set null');
             $table->timestamps();
         });
     }
