@@ -6,30 +6,35 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMovieRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * @return bool
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    /**
+     * @return array
+     */
+    public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
-			'originalTitle' => 'nullable|string|max:255',
+			'original_title' => 'nullable|string|max:255',
 			'overview' => 'nullable|string',
-			'posterPath' => 'nullable|string|max:255',
-			'backdropPath' => 'nullable|string|max:255',
-			'mediaType' => 'nullable|string|max:255',
+			'poster_path' => 'nullable|string|max:255',
+			'backdrop_path' => 'nullable|string|max:255',
 			'adult' => 'nullable|boolean',
-			'originalLanguage' => 'nullable|string|max:255',
+			'original_language' => 'nullable|string|max:255',
 			'popularity' => 'nullable|numeric',
-			'releaseDate' => 'nullable|date',
-			'video' => 'required|boolean',
-			'voteAverage' => 'nullable|numeric',
-			'voteCount' => 'nullable|integer',
+			'release_date' => 'nullable|date',
+			'video' => 'nullable|boolean',
+			'vote_average' => 'nullable|numeric|max:10',
+			'vote_count' => 'nullable|integer',
 			'budget' => 'nullable|integer',
 			'homepage' => 'nullable|string|max:255',
-			'imdbId' => 'nullable|string|max:255',
+			'imdb_id' => 'nullable|string|max:255',
 			'revenue' => 'nullable|integer',
 			'runtime' => 'nullable|integer',
 			'status' => 'nullable|string|max:255',

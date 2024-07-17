@@ -105,7 +105,7 @@ class Movie extends Model
             $this->popularity >= 5000 => 'bg-green-300',
             $this->popularity >= 2000 => 'bg-green-400',
             $this->popularity >= 1000 => 'bg-yellow-300',
-            $this->popularity >= 500 => 'bg-orange-400',
+            $this->popularity >= 500 => 'bg-orange-500',
             default => 'bg-red-700',
         };
     }

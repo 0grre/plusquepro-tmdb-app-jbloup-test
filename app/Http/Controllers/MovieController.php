@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
-use App\Http\Requests\Movie\StoreMovieRequest;
 use App\Http\Requests\Movie\UpdateMovieRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -60,7 +59,7 @@ class MovieController extends Controller
     {
         $movie->update($request->validated());
 
-        return redirect()->route('movies.index')->with('success', 'Movie updated with success.');
+        return redirect()->back()->with('success', 'Movie updated with success.');
     }
 
     /**
@@ -73,6 +72,6 @@ class MovieController extends Controller
     {
         $movie->delete();
 
-        return redirect()->back()->with('success', 'Movie deleted with success.');
+        return redirect()->route('dashboard')->with('success', 'Movie deleted with success.');
     }
 }
