@@ -1,4 +1,4 @@
-<div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full mt-12">
+<div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full my-12">
     <div class="relative bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
         <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
             <div class="w-full md:w-1/2">
@@ -13,7 +13,7 @@
                                       clip-rule="evenodd"/>
                             </svg>
                         </div>
-                        <input type="text" id="simple-search"
+                        <input type="text" id="simple-search" wire:model.live="search"
                                class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                placeholder="Search" required="">
                     </div>
@@ -22,41 +22,15 @@
             <div
                 class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                 <div class="flex items-center w-full space-x-3 md:w-auto">
-                    <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
-                            class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                            type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-4 h-4 mr-2 text-gray-400"
-                             viewbox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                  d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                                  clip-rule="evenodd"/>
+                    <a type="button" href="{{ route('movies.refresh') }}"
+                            class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none"
+                             viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
                         </svg>
-                        Filter
-                        <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path clip-rule="evenodd" fill-rule="evenodd"
-                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-                        </svg>
-                    </button>
-                    <div x-data="{ selectedGenres: @entangle('selectedGenres') }"
-                         x-init="console.log('Selected Genres:', selectedGenres)">
-                        <div id="filterDropdown"
-                             class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                            <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
-                            <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-                                @foreach($genres as $genre)
-                                    <li class="flex items-center">
-                                        <input type="checkbox" value="{{ $genre->name }}" x-model="selectedGenres"
-                                               class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                        <label for="apple"
-                                               class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                                            {{ $genre->name }}
-                                        </label>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+                        Update trending
+                    </a>
                 </div>
             </div>
         </div>
@@ -66,26 +40,55 @@
         <div
             class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
             <div class="flex items-center flex-1 space-x-4">
-                <h5>
-                    <span class="text-gray-500">All Movies</span>
-                    <span class="dark:text-white">{{ $movies->total() }}</span>
-                </h5>
-                <h5>
-                    <span class="text-gray-500">Time window</span>
-                    <span class="dark:text-white">{{ 'time' }}</span>
-                </h5>
+
+                <div class="flex items-center ps-4 border border-gray-200 rounded-lg dark:border-gray-700 mx-2 px-4">
+                    <input checked id="bordered-radio-1" type="radio" value="day" name="bordered-radio" wire:click="updateTimeWindow('day')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Day</label>
+                </div>
+                <div class="flex items-center ps-4 border border-gray-200 rounded-lg dark:border-gray-700 mx-2 px-4">
+                    <input id="bordered-radio-2" type="radio" value="week" name="bordered-radio" wire:click="updateTimeWindow('week')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Week</label>
+                </div>
             </div>
+
             <div
                 class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-                <button type="button"
-                        class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="none"
-                         viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+
+                <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
+                        class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                        type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-4 h-4 mr-2 text-gray-400"
+                         viewbox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                              clip-rule="evenodd"/>
                     </svg>
-                    Update trending
+                    Filter
+                    <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path clip-rule="evenodd" fill-rule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                    </svg>
                 </button>
+                <div id="filterDropdown"
+                     class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
+                    <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+                        @foreach($genres as $genre)
+                            <li class="flex items-center">
+                                <input type="checkbox" value="{{ $genre->name }}" wire:model.live="selectedGenres.{{ $genre->id }}"
+                                       class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
+                                <label for="apple"
+                                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    {{ $genre->name }}
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+
+
             </div>
         </div>
         <div class="overflow-x-auto">

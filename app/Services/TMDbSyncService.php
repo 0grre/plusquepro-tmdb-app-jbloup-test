@@ -8,6 +8,7 @@ use App\Models\ProductionCompany;
 use App\Models\ProductionCountry;
 use App\Models\SpokenLanguage;
 use App\Models\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class TMDbSyncService
@@ -49,7 +50,10 @@ class TMDbSyncService
      */
     public function populateTrendingMovies(string $timeWindow = 'day'): void
     {
+        $cacheKey = 'movies_' . $timeWindow;
         $trendingMovies = $this->apiService->getTrendingMovies($timeWindow);
+
+        Cache::put($cacheKey, $trendingMovies, now()->addHours(12));
 
         foreach ($trendingMovies as $movieData) {
             $movie = Movie::updateOrCreate(

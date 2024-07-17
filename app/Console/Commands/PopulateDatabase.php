@@ -41,13 +41,20 @@ class PopulateDatabase extends Command
         }
 
         $timeWindow = $this->argument('timeWindow');
-        $this->info("Fetching trending movies for {$timeWindow}...");
-        try {
-            $this->syncService->populateTrendingMovies($timeWindow);
-            $this->info('Trending movies fetched and stored.');
-        } catch (\Exception $e) {
-            $this->error("Failed to fetch trending movies: {$e->getMessage()}");
-            return;
+        if (!$timeWindow) {
+            $timeWindows = ['day', 'week'];
+        } else {
+            $timeWindows = [$timeWindow];
+        }
+
+        foreach ($timeWindows as $timeWindow) {
+            $this->info("Fetching trending movies for {$timeWindow}...");
+            try {
+                $this->syncService->populateTrendingMovies($timeWindow);
+                $this->info('Trending movies fetched and stored.');
+            } catch (\Exception $e) {
+                $this->error("Failed to fetch trending movies for {$timeWindow}: {$e->getMessage()}");
+            }
         }
 
         $this->info('Updating movie details...');

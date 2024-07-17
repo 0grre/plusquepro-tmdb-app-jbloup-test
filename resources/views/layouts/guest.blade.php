@@ -21,12 +21,10 @@
     </head>
     <body>
         <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
-
             <main>
                 {{ $slot }}
             </main>
         </div>
-
         @livewireScripts
         <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
     </body>

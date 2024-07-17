@@ -30,8 +30,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::put('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
     Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
+    Route::get('/movies/trending/refresh', [MovieController::class, 'refresh'])->name('movies.refresh');
 
-// ---------------- Livewire ---------------- //
+    // ---------------- Livewire ---------------- //
     Route::get('/components/movies', Movies::class)->name('components.movies.index');
 });
 

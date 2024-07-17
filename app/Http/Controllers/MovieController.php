@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Http\Requests\Movie\UpdateMovieRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class MovieController extends Controller
@@ -73,5 +74,17 @@ class MovieController extends Controller
         $movie->delete();
 
         return redirect()->route('dashboard')->with('success', 'Movie deleted with success.');
+    }
+
+    /**
+     * Refresh trending movies.
+     *
+     * @return RedirectResponse
+     */
+    public function refresh()
+    {
+        Artisan::call('database:populate');
+
+        return redirect()->back()->with('success', 'Trending movies updated with success.');
     }
 }

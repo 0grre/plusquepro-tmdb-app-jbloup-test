@@ -2,7 +2,8 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,9 +14,10 @@ class Movies extends Component
 {
     use WithPagination;
 
-    public string $search = '';
     public array $selectedGenres = [];
+    public string $search = '';
     public int $perPage = 10;
+    public string $timeWindow = 'day';
 
     /**
      * Search and filter query string
@@ -25,6 +27,7 @@ class Movies extends Component
     protected array $queryString = [
         'search' => ['except' => ''],
         'genre' => ['except' => ''],
+        'timeWindow' => ['except' => 'day']
     ];
 
     /**
@@ -38,12 +41,24 @@ class Movies extends Component
     }
 
     /**
-     * Reset page when search or genre is updated
+     * Update genres
      *
      * @return void
      */
-    public function updatingGenre(): void
+    public function updatingGenres(): void
     {
+        $this->resetPage();
+    }
+
+    /**
+     * Update the time window
+     *
+     * @param string $timeWindow
+     * @return void
+     */
+    public function updateTimeWindow(string $timeWindow): void
+    {
+        $this->timeWindow = $timeWindow;
         $this->resetPage();
     }
 
@@ -54,13 +69,21 @@ class Movies extends Component
      */
     public function render(): View
     {
-        Log::debug('Selected Genres:', $this->selectedGenres);
+        $cacheKey = 'movies_' . $this->timeWindow;
+        $movies = Cache::get($cacheKey);
 
-        $query = Movie::query();
+        if (!$movies) {
+            Artisan::call('database:populate', ['timeWindow' => $this->timeWindow]);
+            $movies = Cache::get($cacheKey);
+        }
+
+        $query = Movie::whereIn('id', collect($movies)->pluck('id'));
 
         if ($this->search) {
-            $query->where('title', 'like', '%' . $this->search . '%')
-                ->orWhere('original_title', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->search . '%')
+                    ->orWhere('original_title', 'like', '%' . $this->search . '%');
+            });
         }
 
         if (!empty($this->selectedGenres)) {
