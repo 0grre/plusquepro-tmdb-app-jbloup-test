@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\Movie;
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Movies;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,45 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// ---------------- Guest ---------------- //
+//Route::get('/', function () {
+//    redirect()->route('login');
+//});
+
+// ---------------- Authenticated ---------------- //
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+
+    // ---------------- Movies ---------------- //
+    Route::get('/dashboard', [MovieController::class, 'index'])->name('dashboard');
+    Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
+    Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::put('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
+    Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
+
+// ---------------- Livewire ---------------- //
+    Route::get('/components/movies', Movies::class)->name('components.movies.index');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
-// Routes for Movie
-Route::resource('movies', App\Http\Controllers\MovieController::class);
-
-// Routes for Genre
-Route::resource('genres', App\Http\Controllers\GenreController::class);
-
-// Routes for ProductionCompany
-Route::resource('production-companies', App\Http\Controllers\ProductionCompanyController::class);
-
-// Routes for ProductionCountry
-Route::resource('production-countries', App\Http\Controllers\ProductionCountryController::class);
-
-// Routes for SpokenLanguage
-Route::resource('spoken-languages', App\Http\Controllers\SpokenLanguageController::class);
-
-
-Route::get('test', function () {
-    $service = app()->make(App\Services\TMDbApiService::class);
-    $syncService = app()->make(App\Services\TMDbSyncService::class);
-//    $genres = $service->getTrendingMovies();
-    $genres = Movie::all();
-
-    foreach ($genres as $genre) {
-        $syncService->updateMovieDetails($genre);
-    }
-
-    dd($syncService->formatMovieDetails($service->getMovieDetails(974262))[ "id" ]);
-});

@@ -12,19 +12,7 @@ class MovieController extends Controller
     {
         $movies = Movie::all();
 
-        return view('movies.index', ['movies' => $movies]);
-    }
-
-    public function create()
-    {
-        return view('movies.create');
-    }
-
-    public function store(StoreMovieRequest $request)
-    {
-        Movie::create($request->validated());
-
-        return redirect()->route('movies.index')->with('success', 'Movie created with success.');
+        return view('dashboard', ['movies' => $movies]);
     }
 
     public function show(Movie $movie)
