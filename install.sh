@@ -14,27 +14,27 @@ echo "Creating alias for Laravel Sail..."
 
 # Start Docker containers with Laravel Sail in detached mode
 echo "Starting Laravel Sail containers..."
-sail up -d
+./vendor/bin/sail up -d
 
 # Install npm dependencies
 echo "Installing npm dependencies..."
-sail npm install
+./vendor/bin/sail npm install
 
 # Compile assets with npm (development)
 echo "Compiling assets for development..."
-sail npm run dev
+./vendor/bin/sail npm run dev
 
 # Generate Laravel application key
 echo "Generating Laravel application key..."
-sail artisan key:generate
+./vendor/bin/sail artisan key:generate
 
 # Run database migrations
 echo "Running database migrations..."
-sail artisan migrate
+./vendor/bin/sail artisan migrate
 
 # Populate the database with optional timeWindow argument (day or week)
 echo "Populating the database..."
-sail artisan database:populate --timeWindow=day
+./vendor/bin/sail artisan database:populate --timeWindow=day
 
 # Check for errors after each command
 if [ $? -ne 0 ]; then
