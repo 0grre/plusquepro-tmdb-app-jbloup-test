@@ -4,6 +4,10 @@ cp .env.example .env
 # Add TMBd_API_KEY to .env (replace YOUR_API_KEY with your actual key)
 sed -i 's/^TMBD_API_KEY=.*/TMBD_API_KEY=YOUR_API_KEY/' .env
 
+# Install PHP dependencies
+sed composer install
+echo "Installing PHP dependencies..."
+
 # Start Docker containers with Laravel Sail in detached mode
 echo "Starting Laravel Sail containers..."
 sail up -d
