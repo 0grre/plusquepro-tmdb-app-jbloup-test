@@ -16,9 +16,9 @@ use App\Livewire\Movies;
 */
 
 // ---------------- Guest ---------------- //
-//Route::get('/', function () {
-//    redirect()->route('login');
-//});
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // ---------------- Authenticated ---------------- //
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {

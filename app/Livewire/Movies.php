@@ -46,50 +46,13 @@ class Movies extends Component
     {
         $this->resetPage();
     }
-/**
-     * Format budget
-     *
-     * @param int $number
-     * @return string
-     */
-    public function formatBudget(int $number): string
-    {
-        $number = (string)$number;
-
-        $length = strlen($number);
-
-        if ($length >= 6 && str_ends_with($number, '000000')) {
-            return substr($number, 0, -6) . 'M';
-        } elseif ($length >= 3 && str_ends_with($number, '000')) {
-            return substr($number, 0, -3) . 'K';
-        } else {
-            return $number;
-        }
-    }
-
-    /**
-     * Get color for popularity
-     *
-     * @param int $popularity
-     * @return string
-     */
-    public function getColorForPopularity(int $popularity): string
-    {
-        return match (true) {
-            $popularity >= 5000 => 'bg-green-300',
-            $popularity >= 2000 => 'bg-green-400',
-            $popularity >= 1000 => 'bg-yellow-300',
-            $popularity >= 500 => 'bg-orange-400',
-            default => 'bg-red-700',
-        };
-    }
 
     /**
      * Render the component
      *
      * @return View
      */
-    public function render()
+    public function render(): View
     {
         Log::debug('Selected Genres:', $this->selectedGenres);
 
@@ -109,13 +72,11 @@ class Movies extends Component
         $movies = $query->with('genres')->paginate($this->perPage)->onEachSide(1);
 
         foreach ($movies as $movie) {
-            $movie->budget = $this->formatBudget($movie->budget);
-            $movie->popularity_color = $this->getColorForPopularity($movie->popularity);
+            $movie->reformatBudget();
+            $movie->setColorForPopularity();
         }
 
         $genres = Genre::all();
-
-
 
         return view('livewire.movies', [
             'movies' => $movies,
