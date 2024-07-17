@@ -26,19 +26,26 @@ chmod +x install.sh
 ```
 
 This script will:
-•	Start Laravel Sail containers in detached mode.
-•	Install npm dependencies and compile assets for development.
-•	Generate a Laravel application key.
-•	Run database migrations.
-•	Populate the database with initial data using the artisan database:populate command.
+
+- Start Laravel Sail containers in detached mode.
+- Install npm dependencies and compile assets for development.
+- Generate a Laravel application key.
+- Run database migrations.
+- Populate the database with initial data using the `artisan database:populate` command.
 
 	
 4.	#### Customize Database Population (Optional):
 
-The artisan database:populate command supports an optional timeWindow argument:
-•	--timeWindow=day: Populate data relevant for the current day.
-•	--timeWindow=week: Populate data relevant for the current week.
+The `artisan database:populate` command supports an optional time window argument:
+-	**day**: Populate data relevant for the current day.
+-	**week**: Populate data relevant for the current week.
+
 Specify the desired time window according to your application’s needs.
+
+Example:
+```bash
+sail artisan database:populate day
+```
 
 5.	#### Accessing Your Application:
 Once the installation is complete, you can access your application at http://localhost.
