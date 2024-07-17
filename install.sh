@@ -8,6 +8,10 @@ sed -i 's/^TMBD_API_KEY=.*/TMBD_API_KEY=YOUR_API_KEY/' .env
 sed composer install
 echo "Installing PHP dependencies..."
 
+# Create alias for Laravel Sail
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+echo "Creating alias for Laravel Sail..."
+
 # Start Docker containers with Laravel Sail in detached mode
 echo "Starting Laravel Sail containers..."
 sail up -d
